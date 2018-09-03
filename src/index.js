@@ -13,22 +13,23 @@ const Container = styled.div`
 class App extends React.Component {
   state = initialData;
 
-  onDragStart = () => {
-    document.body.style.color = "orange";
-    document.body.style.transition = "background-color 0.5s ease";
+  onDragStart = start => {
+    const homeIndex = this.state.columnOrder.indexOf(start.source.droppableId);
+
+    this.setState({ homeIndex });
   };
 
   onDragUpdate = update => {
-    const { destination } = update;
-    const opacity = destination
-      ? destination.index / Object.keys(this.state.tasks).length
-      : 0;
-    document.body.style.backgroundColor = `rgba(153,131,217,${opacity}`;
+    // const { destination } = update;
+    // const opacity = destination
+    //   ? destination.index / Object.keys(this.state.tasks).length
+    //   : 0;
+    // document.body.style.backgroundColor = `rgba(153,131,217,${opacity}`;
   };
 
   onDragEnd = result => {
-    // document.body.style.color = "inherit";
-    // document.body.style.backgroundColor = "inherit";
+    this.setState({ homeIndex: null });
+
     const { destination, source, draggableId } = result;
     if (!destination) return;
     if (
@@ -92,15 +93,29 @@ class App extends React.Component {
 
   render() {
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
+      <DragDropContext
+        onDragEnd={this.onDragEnd}
+        onDragStart={this.onDragStart}
+        onDragUpdate={this.onDragUpdate}
+      >
         <Container>
-          {this.state.columnOrder.map(columnId => {
+          {this.state.columnOrder.map((columnId, index) => {
             const column = this.state.columns[columnId];
             const tasks = column.taskIds.map(
               taskId => this.state.tasks[taskId]
             );
 
-            return <Column key={column.id} column={column} tasks={tasks} />;
+            //k drop column.index nho hon
+            const isDropDisabled = index < this.state.homeIndex;
+
+            return (
+              <Column
+                key={column.id}
+                column={column}
+                tasks={tasks}
+                isDropDisabled={isDropDisabled}
+              />
+            );
           })}
         </Container>
       </DragDropContext>

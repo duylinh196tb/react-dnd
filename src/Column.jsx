@@ -25,7 +25,10 @@ export default class componentName extends Component {
     return (
       <Container>
         <Title>{this.props.column.title}</Title>
-        <Droppable droppableId={this.props.column.id}>
+        <Droppable
+          droppableId={this.props.column.id}
+          isDropDisabled={this.props.isDropDisabled}
+        >
           {(provided, snapshot) => (
             <TaskList
               innerRef={provided.innerRef}
