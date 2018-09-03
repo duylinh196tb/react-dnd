@@ -5,9 +5,14 @@ import { Draggable } from "react-beautiful-dnd";
 const Container = styled.div`
   border: 1px solid lightgrey;
   padding: 8px;
-  margin-bottom: 8px;
+  margin-right: 8px;
   background-color: ${props => (props.isDragging ? "lightgreen" : "white")};
   display: flex;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  align-items: center;
 `;
 
 const Handle = styled.div`
